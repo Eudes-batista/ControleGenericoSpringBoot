@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationEvent;
 public class ResourceCreateEvent<T extends EntityBase> extends ApplicationEvent{
     
     private final HttpServletResponse httpServletResponse;
-    private T t;
+    private final T t;
     
     public ResourceCreateEvent(Object source,HttpServletResponse httpServletResponse,T t) {
         super(source);

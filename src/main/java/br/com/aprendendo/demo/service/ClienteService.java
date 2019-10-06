@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.aprendendo.demo.service;
 
 import br.com.aprendendo.demo.model.Cliente;
@@ -27,6 +22,11 @@ public class ClienteService extends DefaultService<Cliente, String>{
     @Override
     public Page<Cliente> pesquisarConteudo(String pesquisa, Pageable pageable) {
         return this.repositorio.findByTelefoneOrNomeIgnoreCaseContaining(pesquisa, pesquisa.toUpperCase(), pageable);
+    }
+
+    @Override
+    public String[] getCamposASeremIgnoradosNaAlteracao() {
+        return new String[]{"telefone"};
     }
     
 }

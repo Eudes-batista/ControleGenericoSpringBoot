@@ -27,9 +27,9 @@ public abstract class DefaultController<T extends EntityBase, ID> {
 
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
-
+    
     @GetMapping
-    public ResponseEntity<Page<T>> listarTodos(Pageable pageable) {
+    public ResponseEntity<Page<T>> listarTodos(Pageable pageable) {        
         return ResponseEntity.status(HttpStatus.OK).body(this.genericService.listarTodos(pageable));
     }
 
@@ -59,5 +59,5 @@ public abstract class DefaultController<T extends EntityBase, ID> {
     public void excluir(@PathVariable("content") ID id) {
         this.genericService.excluir(id);
     }
-
+    
 }

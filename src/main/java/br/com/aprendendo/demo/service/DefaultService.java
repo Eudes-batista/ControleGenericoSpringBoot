@@ -32,7 +32,7 @@ public abstract class DefaultService<T extends EntityBase, ID> implements Generi
             return null;
         }
         T findT = optionalT.get();
-        BeanUtils.copyProperties(t, findT, "codigo");
+        BeanUtils.copyProperties(t, findT,this.getCamposASeremIgnoradosNaAlteracao());
         return this.repositorio.save(findT);
     }
 
@@ -46,5 +46,7 @@ public abstract class DefaultService<T extends EntityBase, ID> implements Generi
     public void excluir(ID id) {
         this.repositorio.deleteById(id);
     }
+    
+    public abstract String[] getCamposASeremIgnoradosNaAlteracao();
 
 }

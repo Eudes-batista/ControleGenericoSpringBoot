@@ -1,10 +1,13 @@
 package br.com.aprendendo.demo.model;
 
+import br.com.aprendendo.demo.model.base.EntityBase;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,7 +23,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = {"referencia"})
 @Entity
 @Table(name = "produto")
-public class Produto implements Serializable {
+public class Produto implements EntityBase<String>,Serializable {
 
     @Id
     @Column(name = "referencia", length = 60, nullable = false)
@@ -37,5 +40,12 @@ public class Produto implements Serializable {
     
     @Column(name = "estoque_minimo", precision = 6, scale = 3, nullable = false)
     private Double estoqueMinimo;
+
+    @JsonIgnore
+    @Transient
+    @Override
+    public String getPrimary() {
+        return this.referencia;
+    }
 
 }

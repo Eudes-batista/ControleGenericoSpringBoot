@@ -1,5 +1,7 @@
 package br.com.aprendendo.demo.model;
 
+import br.com.aprendendo.demo.model.base.EntityBase;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,7 +27,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = {"codigo"})
 @Entity
 @Table(name = "forma_pagamento")
-public class FormaPagamento implements Serializable {
+public class FormaPagamento implements EntityBase<Integer>,Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,5 +40,12 @@ public class FormaPagamento implements Serializable {
     @ManyToOne
     @JoinColumn(name="codigo_tipo_pagamento",nullable = false,referencedColumnName = "codigo")
     private TipoPagamento tipoPagamento;
+
+    @Transient
+    @JsonIgnore
+    @Override
+    public Integer getPrimary() {
+        return this.codigo;
+    }
 
 }

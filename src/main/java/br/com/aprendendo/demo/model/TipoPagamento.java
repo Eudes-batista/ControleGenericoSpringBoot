@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -39,6 +40,7 @@ public class TipoPagamento implements Serializable,EntityBase<Integer> {
     private String nome;
 
     @JsonIgnore
+    @Transient
     @Override
     public Integer getPrimary() {
         return this.codigo;
