@@ -5,8 +5,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+@Component
 public class ResourceListener implements ApplicationListener<ResourceCreateEvent> {
 
     @Override
