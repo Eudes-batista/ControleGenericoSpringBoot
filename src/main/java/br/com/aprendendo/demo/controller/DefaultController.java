@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @CrossOrigin
 public abstract class DefaultController<T extends EntityBase, ID> {
@@ -45,9 +46,9 @@ public abstract class DefaultController<T extends EntityBase, ID> {
     }
 
     @PostMapping
-    public T salvar(@RequestBody @Valid T t, HttpServletResponse httpServletResponse) {
+    public ResponseEntity<T> salvar(@RequestBody @Valid T t, HttpServletResponse httpServletResponse) {
         this.applicationEventPublisher.publishEvent(new ResourceCreateEvent<>(this, httpServletResponse, t));
-        return this.genericService.salvar(t);
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.genericService.salvar(t));
     }
 
     @PutMapping("{content}")
@@ -56,6 +57,7 @@ public abstract class DefaultController<T extends EntityBase, ID> {
     }
 
     @DeleteMapping("{content}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable("content") ID id) {
         this.genericService.excluir(id);
     }
