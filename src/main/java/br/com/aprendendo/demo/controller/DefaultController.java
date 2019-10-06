@@ -50,8 +50,9 @@ public abstract class DefaultController<T, ID> {
 
     @PostMapping
     public ResponseEntity<T> salvar(@RequestBody @Valid T t, HttpServletResponse httpServletResponse) {
-        this.applicationEventPublisher.publishEvent(new ResourceCreateEvent(this, httpServletResponse, this.getParams(t)));
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.genericService.salvar(t));
+        T tSalvo = this.genericService.salvar(t);
+        this.applicationEventPublisher.publishEvent(new ResourceCreateEvent(this, httpServletResponse, this.getParams(tSalvo)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(tSalvo);
     }
 
     @PutMapping("{content}")
