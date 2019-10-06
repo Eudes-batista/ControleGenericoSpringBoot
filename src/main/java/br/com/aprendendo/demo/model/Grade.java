@@ -23,6 +23,9 @@ public class Grade implements Serializable {
     @EmbeddedId
     private GradePK gradePK;
 
+    @Column(name = "nome", length = 30, nullable = true)
+    private String nome;
+    
     @Column(name = "cor", length = 30, nullable = false)
     private String cor;
     
