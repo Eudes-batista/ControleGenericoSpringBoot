@@ -1,14 +1,11 @@
 package br.com.aprendendo.demo.model;
 
-import br.com.aprendendo.demo.model.base.EntityBase;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -27,7 +24,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "cliente")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Cliente implements Serializable,EntityBase<String> {
+public class Cliente implements Serializable {
 
     @Id
     @Column(name = "telefone", length = 9, nullable = false)
@@ -60,12 +57,5 @@ public class Cliente implements Serializable,EntityBase<String> {
     
     @Column(name = "status", nullable = false)
     private Boolean status;
-
-    @JsonIgnore
-    @Transient
-    @Override
-    public String getPrimary() {
-        return this.telefone;
-    }
 
 }

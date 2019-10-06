@@ -1,27 +1,26 @@
 package br.com.aprendendo.demo.event;
 
-import br.com.aprendendo.demo.model.base.EntityBase;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationEvent;
 
-public class ResourceCreateEvent<T extends EntityBase> extends ApplicationEvent{
-    
+public class ResourceCreateEvent extends ApplicationEvent {
+
     private final HttpServletResponse httpServletResponse;
-    private final T t;
-    
-    public ResourceCreateEvent(Object source,HttpServletResponse httpServletResponse,T t) {
+    private final Map<String, Object> mapParams;
+
+    public ResourceCreateEvent(Object source, HttpServletResponse httpServletResponse, Map<String, Object> mapParams) {
         super(source);
         this.httpServletResponse = httpServletResponse;
-        this.t = t;
+        this.mapParams = mapParams;
     }
 
     public HttpServletResponse getHttpServletResponse() {
         return httpServletResponse;
     }
 
-    public T getT() {
-        return t;
+    public Map<String, Object> getMapParams() {
+        return mapParams;
     }
-    
     
 }

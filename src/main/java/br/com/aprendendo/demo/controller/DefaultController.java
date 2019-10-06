@@ -1,8 +1,9 @@
 package br.com.aprendendo.demo.controller;
 
 import br.com.aprendendo.demo.event.ResourceCreateEvent;
-import br.com.aprendendo.demo.model.base.EntityBase;
 import br.com.aprendendo.demo.service.GenericService;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @CrossOrigin
-public abstract class DefaultController<T extends EntityBase, ID> {
+public abstract class DefaultController<T, ID> {
 
     @Autowired
     private GenericService<T, ID> genericService;
+    
+    private static Map<String,Object> params = null;
 
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
@@ -47,7 +50,7 @@ public abstract class DefaultController<T extends EntityBase, ID> {
 
     @PostMapping
     public ResponseEntity<T> salvar(@RequestBody @Valid T t, HttpServletResponse httpServletResponse) {
-        this.applicationEventPublisher.publishEvent(new ResourceCreateEvent<>(this, httpServletResponse, t));
+        this.applicationEventPublisher.publishEvent(new ResourceCreateEvent(this, httpServletResponse, this.getParams(t)));
         return ResponseEntity.status(HttpStatus.CREATED).body(this.genericService.salvar(t));
     }
 
@@ -61,5 +64,14 @@ public abstract class DefaultController<T extends EntityBase, ID> {
     public void excluir(@PathVariable("content") ID id) {
         this.genericService.excluir(id);
     }
+    
+    public static Map<String,Object> criarParams() {
+        if(params == null)
+            params = new HashMap<>();
+        params.clear();
+        return params;    
+    }
+        
+    public abstract Map<String,Object> getParams(T t);
     
 }

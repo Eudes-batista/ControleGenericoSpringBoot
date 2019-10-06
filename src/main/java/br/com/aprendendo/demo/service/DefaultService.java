@@ -1,13 +1,12 @@
 package br.com.aprendendo.demo.service;
 
-import br.com.aprendendo.demo.model.base.EntityBase;
 import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public abstract class DefaultService<T extends EntityBase, ID> implements GenericService<T, ID> {
+public abstract class DefaultService<T, ID> implements GenericService<T, ID> {
 
     private final JpaRepository<T, ID> repositorio;
 
