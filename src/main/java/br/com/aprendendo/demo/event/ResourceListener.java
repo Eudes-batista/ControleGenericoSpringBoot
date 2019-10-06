@@ -4,8 +4,8 @@ import java.net.URI;
 import org.springframework.context.ApplicationListener;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-public class ResourceListener implements ApplicationListener<ResourceCreateEvent>{
-    
+public class ResourceListener implements ApplicationListener<ResourceCreateEvent> {
+
     @Override
     public void onApplicationEvent(ResourceCreateEvent resourceCreateEvent) {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
@@ -14,5 +14,5 @@ public class ResourceListener implements ApplicationListener<ResourceCreateEvent
                 .toUri();
         resourceCreateEvent.getHttpServletResponse().setHeader("Location", uri.toASCIIString());
     }
-    
+
 }
