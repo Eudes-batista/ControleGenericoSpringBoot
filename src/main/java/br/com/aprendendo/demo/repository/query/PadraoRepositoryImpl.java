@@ -1,7 +1,7 @@
 package br.com.aprendendo.demo.repository.query;
 
 import br.com.aprendendo.demo.repository.filter.Filter;
-import br.com.aprendendo.demo.repository.filter.TypeSearch;
+import br.com.aprendendo.demo.repository.filter.SearchType;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -68,22 +68,22 @@ public abstract class PadraoRepositoryImpl<T> implements PadraoRepositoryQuery<T
         Predicate[] predicateSearch = new Predicate[filters.length];
         for (int i = 0; i < filters.length; i++) {
             Predicate predicate;
-            if (TypeSearch.CONTAINING.equals(filters[i].getTypeSearch())) {
-                predicate = builder.like(builder.lower(root.get(filters[i].getNameSearch())), "%" + pesquisa + "%");
+            if (SearchType.CONTAINING.equals(filters[i].getSearchType())) {
+                predicate = builder.like(builder.lower(root.get(filters[i].getSearchName())), "%" + pesquisa + "%");
                 predicateSearch[i] = predicate;
                 continue;
             }
-            if (TypeSearch.EQUAL.equals(filters[i].getTypeSearch())) {
-                predicate = builder.like(builder.lower(root.get(filters[i].getNameSearch())), pesquisa);
+            if (SearchType.EQUAL.equals(filters[i].getSearchType())) {
+                predicate = builder.like(builder.lower(root.get(filters[i].getSearchName())), pesquisa);
                 predicateSearch[i] = predicate;
                 continue;
             }
-            if (TypeSearch.LAST.equals(filters[i].getTypeSearch())) {
-                predicate = builder.like(builder.lower(root.get(filters[i].getNameSearch())), "%" + pesquisa);
+            if (SearchType.LAST.equals(filters[i].getSearchType())) {
+                predicate = builder.like(builder.lower(root.get(filters[i].getSearchName())), "%" + pesquisa);
                 predicateSearch[i] = predicate;
                 continue;
             }
-            predicate = builder.like(builder.lower(root.get(filters[i].getNameSearch())), pesquisa + "%");
+            predicate = builder.like(builder.lower(root.get(filters[i].getSearchName())), pesquisa + "%");
             predicateSearch[i] = predicate;
         }
         Predicate condicao = builder.or(predicateSearch);
