@@ -25,7 +25,7 @@ public class ProdutoService extends DefaultService<Produto, String> {
 
     @Override
     public Page<Produto> pesquisarConteudo(String pesquisa, Pageable pageable) {
-        return this.produtoRepositorio.findByReferenciaOrNomeIgnoreCaseContaining(pesquisa, pesquisa.toUpperCase(), pageable);
+        return this.produtoRepositorio.filtrar(pesquisa, pageable, Produto.class);
     }
 
 }

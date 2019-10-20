@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "cliente")
 public class ClienteControle extends DefaultController<Cliente, String> {
-
+    
     @Override
     public Map<String, Object> getParams(Cliente t) {
         Map<String, Object> map = DefaultController.criarParams();

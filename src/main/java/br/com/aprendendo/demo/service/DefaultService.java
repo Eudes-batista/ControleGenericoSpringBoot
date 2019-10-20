@@ -39,7 +39,7 @@ public abstract class DefaultService<T, ID> implements GenericService<T, ID> {
     public T buscar(ID id) {
         Optional<T> optionalT = this.repositorio.findById(id);
         return optionalT.isPresent() ? optionalT.get() : null;
-    }
+    }    
 
     @Override
     public void excluir(ID id) {

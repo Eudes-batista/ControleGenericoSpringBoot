@@ -7,12 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-
 @Service
-public class ClienteService extends DefaultService<Cliente, String>{
+public class ClienteService extends DefaultService<Cliente, String> {
 
     private final ClienteRepositorio repositorio;
-    
+
     @Autowired
     public ClienteService(ClienteRepositorio repositorio) {
         super(repositorio);
@@ -21,12 +20,12 @@ public class ClienteService extends DefaultService<Cliente, String>{
 
     @Override
     public Page<Cliente> pesquisarConteudo(String pesquisa, Pageable pageable) {
-        return this.repositorio.findByTelefoneOrNomeIgnoreCaseContaining(pesquisa, pesquisa.toUpperCase(), pageable);
+        return this.repositorio.filtrar(pesquisa, pageable, Cliente.class);
     }
 
     @Override
     public String[] getCamposASeremIgnoradosNaAlteracao() {
         return new String[]{"telefone"};
     }
-    
+
 }

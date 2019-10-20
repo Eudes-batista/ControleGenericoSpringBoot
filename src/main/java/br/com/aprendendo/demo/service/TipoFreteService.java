@@ -20,7 +20,7 @@ public class TipoFreteService extends DefaultService<TipoFrete, Integer>{
 
     @Override
     public Page<TipoFrete> pesquisarConteudo(String pesquisa, Pageable pageable) {
-        return this.tipoFreteRepositorio.findByNomeIgnoreCaseContaining(pesquisa, pageable);
+        return this.tipoFreteRepositorio.filtrar(pesquisa, pageable,TipoFrete.class);
     }
 
     @Override

@@ -20,7 +20,7 @@ public class TipoPagamentoService extends DefaultService<TipoPagamento, Integer>
 
     @Override
     public Page<TipoPagamento> pesquisarConteudo(String pesquisa, Pageable pageable) {
-        return this.tipoPagamentoRepositorio.findByNomeIgnoreCaseContaining(pesquisa, pageable);
+        return this.tipoPagamentoRepositorio.filtrar(pesquisa, pageable,TipoPagamento.class);       
     }
 
     @Override
