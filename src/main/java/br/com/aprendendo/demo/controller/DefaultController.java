@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public abstract class DefaultController<T, ID> {
 
     @Autowired
+    @Getter
     private GenericService<T, ID> genericService;
     
     private static Map<String,Object> params = null;
