@@ -1,5 +1,6 @@
 package br.com.aprendendo.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +24,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = {"codigo"})
 @Entity
 @Table(name = "tipo_frete")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TipoFrete implements Serializable{
     
     @Id

@@ -1,5 +1,6 @@
 package br.com.aprendendo.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,6 +25,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = {"codigo"})
 @Entity
 @Table(name = "forma_pagamento")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FormaPagamento implements Serializable {
 
     @Id

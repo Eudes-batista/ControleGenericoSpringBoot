@@ -1,5 +1,6 @@
 package br.com.aprendendo.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +21,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = {"referencia"})
 @Entity
 @Table(name = "produto")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Produto implements Serializable {
 
     @Id

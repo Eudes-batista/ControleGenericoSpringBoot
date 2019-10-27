@@ -1,5 +1,6 @@
 package br.com.aprendendo.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -26,6 +27,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = {"numeroDocumento"})
 @Entity
 @Table(name = "ficha_producao")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FichaProducao implements Serializable{
     
     @Id

@@ -1,5 +1,6 @@
 package br.com.aprendendo.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -22,6 +23,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "ficha_producao_item")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FichaProdutoItem implements Serializable {
 
     @EmbeddedId
