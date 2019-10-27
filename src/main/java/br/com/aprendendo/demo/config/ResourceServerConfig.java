@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,6 +17,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
+@EnableWebSecurity
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
@@ -24,7 +26,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     
     @Autowired
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(this.userDetailsService).passwordEncoder(bcryptPasswordEncoder());
     }
 
     @Override
@@ -52,7 +54,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     }
     
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder bcryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
     
