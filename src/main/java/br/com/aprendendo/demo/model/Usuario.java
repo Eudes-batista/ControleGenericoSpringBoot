@@ -2,10 +2,16 @@ package br.com.aprendendo.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -43,6 +49,7 @@ public class Usuario implements Serializable {
     @NotEmpty
     @NotNull
     @Column(name = "email", length = 50, nullable = false)
+    @Email
     private String email;
 
     @Size(max = 150)
@@ -50,5 +57,12 @@ public class Usuario implements Serializable {
     @NotNull
     @Column(name = "senha", length = 150, nullable = false)
     private String senha;
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name= "usuario_permissao", joinColumns = @JoinColumn(name="codigo_usuario")
+       ,inverseJoinColumns = @JoinColumn(name="codigo_permissao")
+    )
+    private List<Permissao> permissoes;
 
 }
