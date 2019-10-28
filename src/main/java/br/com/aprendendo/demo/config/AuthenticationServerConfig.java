@@ -27,7 +27,7 @@ public class AuthenticationServerConfig extends AuthorizationServerConfigurerAda
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
                 .withClient("angular")
-                .secret("@ngul@r0")
+                .secret("$2a$10$G1j5Rf8aEEiGc/AET9BA..xRR.qCpOUzBZoJd8ygbGy6tb3jsMT9G")
                 .scopes("read", "write")
                 .authorizedGrantTypes("password", "refresh_token")
                 .accessTokenValiditySeconds(30)
@@ -40,14 +40,14 @@ public class AuthenticationServerConfig extends AuthorizationServerConfigurerAda
                 .tokenStore(tokenStore())
                 .accessTokenConverter(this.accessTokenConverter())
                 .reuseRefreshTokens(false)
-                .userDetailsService(this.userDetailsService)
-                .authenticationManager(this.authenticationManager);
+                .authenticationManager(this.authenticationManager)
+                .userDetailsService(this.userDetailsService);
     }
 
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-        accessTokenConverter.setSigningKey("springBoot");
+        accessTokenConverter.setSigningKey("4lg4w0rk5");
         return accessTokenConverter;
     }
 
