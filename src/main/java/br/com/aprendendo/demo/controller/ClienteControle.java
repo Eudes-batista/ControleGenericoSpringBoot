@@ -11,6 +11,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,17 +31,13 @@ public class ClienteControle extends DefaultController<Cliente, String> {
     }
 
     @GetMapping(value = "/pdfreport", produces = MediaType.APPLICATION_PDF_VALUE)
+    @PreAuthorize("hasAuthority('ROLE_PESQUISA') and #oauth2.hasScope('read')")
     public ResponseEntity<InputStreamResource> clientReport(HttpServletRequest httpServletRequest) {
-        
         String nomeArquivo = httpServletRequest.getHeader("fileName");
-        
         var clientes = this.clienteRepositorio.findAll();
-
         ByteArrayInputStream bis = ClientReport.clientReport(clientes);
-
         var headers = new HttpHeaders();
-        headers.add("Content-Disposition", "inline; filename="+nomeArquivo+".pdf");
-
+        headers.add("Content-Disposition", "inline; filename=" + nomeArquivo + ".pdf");
         return ResponseEntity
                 .ok()
                 .headers(headers)
