@@ -1,8 +1,10 @@
 package br.com.aprendendo.demo.token;
 
+import br.com.aprendendo.demo.config.property.SpringBootProperty;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -18,6 +20,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @ControllerAdvice
 public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2AccessToken> {
 
+    @Autowired
+    private SpringBootProperty springBootProperty;
+    
     @Override
     public boolean supports(MethodParameter mp, Class<? extends HttpMessageConverter<?>> type) {
         return "postAccessToken".equals(mp.getMethod().getName());
@@ -41,7 +46,7 @@ public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2Acces
     private void adicionarRefreshTokenNoCookie(String refreshToken, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         Cookie cookie = new Cookie("refreshToken", refreshToken);
         cookie.setHttpOnly(true);
-        cookie.setSecure(false); // change while for production true
+        cookie.setSecure(this.springBootProperty.getSeguranca().isIsHttps()); // change while for production true
         cookie.setPath(httpServletRequest.getContextPath() + "/oauth/token");
         cookie.setMaxAge(259200);
         httpServletResponse.addCookie(cookie);
