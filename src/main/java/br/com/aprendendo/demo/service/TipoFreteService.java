@@ -19,13 +19,13 @@ public class TipoFreteService extends DefaultService<TipoFrete, Integer>{
     }
 
     @Override
-    public Page<TipoFrete> pesquisarConteudo(String pesquisa, Pageable pageable) {
-        return this.tipoFreteRepositorio.filtrar(pesquisa, pageable,TipoFrete.class);
-    }
-
-    @Override
     public String[] getCamposASeremIgnoradosNaAlteracao() {
         return new String[]{"codigo"};
+    }
+    
+    @Override
+    public Page<?> pesquisarConteudo(String pesquisa, Pageable pageable) {
+        return this.tipoFreteRepositorio.filtrar(pesquisa, pageable, TipoFrete.class);
     }
         
 }

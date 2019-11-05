@@ -1,5 +1,6 @@
 package br.com.aprendendo.demo.service;
 
+import br.com.aprendendo.demo.model.TipoFrete;
 import br.com.aprendendo.demo.model.TipoPagamento;
 import br.com.aprendendo.demo.repository.TipoPagamentoRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,13 @@ public class TipoPagamentoService extends DefaultService<TipoPagamento, Integer>
     }
 
     @Override
-    public Page<TipoPagamento> pesquisarConteudo(String pesquisa, Pageable pageable) {
-        return this.tipoPagamentoRepositorio.filtrar(pesquisa, pageable,TipoPagamento.class);       
+    public String[] getCamposASeremIgnoradosNaAlteracao() {
+        return new String[]{"codigo"};
     }
 
     @Override
-    public String[] getCamposASeremIgnoradosNaAlteracao() {
-        return new String[]{"codigo"};
+    public Page<?> pesquisarConteudo(String pesquisa, Pageable pageable) {
+        return tipoPagamentoRepositorio.filtrar(pesquisa, pageable, TipoFrete.class);
     }
 
 }

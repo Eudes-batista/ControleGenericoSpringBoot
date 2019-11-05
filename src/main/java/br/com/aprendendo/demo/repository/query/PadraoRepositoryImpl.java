@@ -22,28 +22,28 @@ public abstract class PadraoRepositoryImpl<T> implements PadraoRepositoryQuery<T
     private EntityManager entityManager;
 
     @Override
-    public Page<T> filtrar(String pesquisa, Pageable pageable, Class<T> classe) {
+    public Page<?> filtrar(String pesquisa, Pageable pageable, Class<?> classe) {
         CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
 
-        CriteriaQuery<T> criteria = builder.createQuery(classe);
+        CriteriaQuery<?> criteria = builder.createQuery(classe);
 
-        Root<T> root = criteria.from(classe);
+        Root<?> root = criteria.from(classe);
 
         Predicate[] predicate = criarRestricoes(pesquisa, builder, root);
 
         criteria.where(predicate);
 
-        TypedQuery<T> query = this.entityManager.createQuery(criteria);
+        TypedQuery<?> query = this.entityManager.createQuery(criteria);
 
         adicionarRestricoesDePaginacao(query, pageable);
 
         return new PageImpl<>(query.getResultList(), pageable, getElementSize(pesquisa, pageable, classe));
     }
 
-    private Long getElementSize(String pesquisa, Pageable pageable, Class<T> classe) {
+    private Long getElementSize(String pesquisa, Pageable pageable, Class<?> classe) {
         CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
-        Root<T> root = criteria.from(classe);
+        Root<?> root = criteria.from(classe);
         Predicate[] predicate = criarRestricoes(pesquisa, builder, root);
         criteria.where(predicate);
         criteria.select(builder.count(root));
@@ -51,7 +51,7 @@ public abstract class PadraoRepositoryImpl<T> implements PadraoRepositoryQuery<T
         return query.getSingleResult();
     }
 
-    private void adicionarRestricoesDePaginacao(TypedQuery<T> query, Pageable pageable) {
+    private void adicionarRestricoesDePaginacao(TypedQuery<?> query, Pageable pageable) {
         int paginaAtual = pageable.getPageNumber();
         int totalDeRegistroPorPagina = pageable.getPageSize();
         int primeiroRegistroDaPagina = paginaAtual * totalDeRegistroPorPagina;
@@ -59,7 +59,7 @@ public abstract class PadraoRepositoryImpl<T> implements PadraoRepositoryQuery<T
         query.setMaxResults(totalDeRegistroPorPagina);
     }
 
-    public Predicate[] criarRestricoes(String pesquisa, CriteriaBuilder builder, Root<T> root) {
+    public Predicate[] criarRestricoes(String pesquisa, CriteriaBuilder builder, Root<?> root) {
         List<Predicate> predicates = new ArrayList<>();
         if (StringUtils.isEmpty(pesquisa)) {
             return predicates.toArray(new Predicate[predicates.size()]);

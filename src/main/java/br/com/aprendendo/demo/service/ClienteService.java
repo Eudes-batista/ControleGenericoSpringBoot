@@ -19,13 +19,13 @@ public class ClienteService extends DefaultService<Cliente, String> {
     }
 
     @Override
-    public Page<Cliente> pesquisarConteudo(String pesquisa, Pageable pageable) {
-        return this.repositorio.filtrar(pesquisa, pageable, Cliente.class);
+    public String[] getCamposASeremIgnoradosNaAlteracao() {
+        return new String[]{"telefone"};
     }
 
     @Override
-    public String[] getCamposASeremIgnoradosNaAlteracao() {
-        return new String[]{"telefone"};
+    public Page<?> pesquisarConteudo(String pesquisa, Pageable pageable) {
+        return this.repositorio.filtrar(pesquisa, pageable, Cliente.class);
     }
 
 }

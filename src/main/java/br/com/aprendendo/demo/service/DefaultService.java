@@ -13,7 +13,7 @@ public abstract class DefaultService<T, ID> implements GenericService<T, ID> {
     public DefaultService(JpaRepository<T, ID> repositorio) {
         this.repositorio = repositorio;
     }
-
+    
     @Override
     public Page<T> listarTodos(Pageable pageable) {
         return this.repositorio.findAll(pageable);

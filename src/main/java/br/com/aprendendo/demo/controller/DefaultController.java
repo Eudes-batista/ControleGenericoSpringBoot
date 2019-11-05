@@ -41,7 +41,7 @@ public abstract class DefaultController<T, ID> {
 
     @GetMapping("{content}/search")
     @PreAuthorize("hasAuthority('ROLE_PESQUISA') and #oauth2.hasScope('read')")
-    public ResponseEntity<Page<T>> listarConteudo(@PathVariable("content") String content, Pageable pageable) {
+    public ResponseEntity<Page<?>> listarConteudo(@PathVariable("content") String content, Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(this.genericService.pesquisarConteudo(content, pageable));
     }
 

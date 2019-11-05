@@ -5,6 +5,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface PadraoRepositoryQuery<T> {
     
-    public Page<T> filtrar(String pesquisa,Pageable pageable,Class<T> classe);
+    public Page<?> filtrar(String pesquisa,Pageable pageable,Class<?> classe);
     
 }
