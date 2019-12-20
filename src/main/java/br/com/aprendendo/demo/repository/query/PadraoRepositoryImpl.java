@@ -2,52 +2,36 @@ package br.com.aprendendo.demo.repository.query;
 
 import br.com.aprendendo.demo.repository.filter.Filter;
 import br.com.aprendendo.demo.repository.filter.SearchType;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.util.StringUtils;
 
 public abstract class PadraoRepositoryImpl<T> implements PadraoRepositoryQuery<T> {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    private EntityManager entittyManager;
+    private StringBuilder sql;
 
     @Override
     public Page<?> filtrar(String pesquisa, Pageable pageable, Class<?> classe) {
-        CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
-
-        CriteriaQuery<?> criteria = builder.createQuery(classe);
-
-        Root<?> root = criteria.from(classe);
-
-        Predicate[] predicate = criarRestricoes(pesquisa, builder, root);
-
-        criteria.where(predicate);
-
-        TypedQuery<?> query = this.entityManager.createQuery(criteria);
-
-        adicionarRestricoesDePaginacao(query, pageable);
-
-        return new PageImpl<>(query.getResultList(), pageable, getElementSize(pesquisa, pageable, classe));
+        this.sql = null;
+        this.sql = new StringBuilder();
+        this.sql.append("select t from ").append(classe.getSimpleName()).append(" t where ");
+        this.adicionarCondicao(pesquisa);
+        TypedQuery<?> typeQuery = this.entittyManager.createQuery(this.sql.toString(), classe);
+        this.adicionarRestricoesDePaginacao(typeQuery, pageable);
+        return new PageImpl<>(typeQuery.getResultList(), pageable, getElementSize(pesquisa, classe));
     }
 
-    private Long getElementSize(String pesquisa, Pageable pageable, Class<?> classe) {
-        CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
-        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
-        Root<?> root = criteria.from(classe);
-        Predicate[] predicate = criarRestricoes(pesquisa, builder, root);
-        criteria.where(predicate);
-        criteria.select(builder.count(root));
-        TypedQuery<Long> query = this.entityManager.createQuery(criteria);
+    private Long getElementSize(String pesquisa, Class<?> classe) {
+        this.sql = null;
+        this.sql = new StringBuilder();
+        this.sql.append("select count(*) from ").append(classe.getSimpleName()).append(" where ");
+        this.adicionarCondicao(pesquisa);
+        TypedQuery<Long> query = this.entittyManager.createQuery(this.sql.toString(), Long.class);
         return query.getSingleResult();
     }
 
@@ -59,36 +43,40 @@ public abstract class PadraoRepositoryImpl<T> implements PadraoRepositoryQuery<T
         query.setMaxResults(totalDeRegistroPorPagina);
     }
 
-    public Predicate[] criarRestricoes(String pesquisa, CriteriaBuilder builder, Root<?> root) {
-        List<Predicate> predicates = new ArrayList<>();
-        if (StringUtils.isEmpty(pesquisa)) {
-            return predicates.toArray(new Predicate[predicates.size()]);
-        }
+    private void adicionarCondicao(String pesquisa) {
         Filter[] filters = getSearchNames();
-        Predicate[] predicateSearch = new Predicate[filters.length];
-        for (int i = 0; i < filters.length; i++) {
-            Predicate predicate;
-            if (SearchType.CONTAINING.equals(filters[i].getSearchType())) {
-                predicate = builder.like(builder.lower(root.get(filters[i].getSearchName())), "%" + pesquisa + "%");
-                predicateSearch[i] = predicate;
+        int count = 0;
+        for (Filter filter : filters) {
+            if (SearchType.CONTAINING.equals(filter.getSearchType())) {
+                count++;
+                if (count > 1) {
+                    this.sql.append(" or ");
+                }
+                this.sql.append("upper(").append(filter.getSearchName()).append(") like '%").append(pesquisa.toUpperCase()).append("%'");
                 continue;
             }
-            if (SearchType.EQUAL.equals(filters[i].getSearchType())) {
-                predicate = builder.like(builder.lower(root.get(filters[i].getSearchName())), pesquisa);
-                predicateSearch[i] = predicate;
+            if (SearchType.EQUAL.equals(filter.getSearchType())) {
+                count++;
+                if (count > 1) {
+                    this.sql.append(" or ");
+                }
+                this.sql.append("upper(").append(filter.getSearchName()).append(") like '").append(pesquisa).append("'");
                 continue;
             }
-            if (SearchType.LAST.equals(filters[i].getSearchType())) {
-                predicate = builder.like(builder.lower(root.get(filters[i].getSearchName())), "%" + pesquisa);
-                predicateSearch[i] = predicate;
+            if (SearchType.LAST.equals(filter.getSearchType())) {
+                count++;
+                if (count > 1) {
+                    this.sql.append(" or ");
+                }
+                this.sql.append("upper(").append(filter.getSearchName()).append(") like '%").append(pesquisa).append("'");
                 continue;
             }
-            predicate = builder.like(builder.lower(root.get(filters[i].getSearchName())), pesquisa + "%");
-            predicateSearch[i] = predicate;
+            count++;
+            if (count > 1) {
+                this.sql.append(" or ");
+            }
+            this.sql.append("upper(").append(filter.getSearchName()).append(") like '").append(pesquisa).append("%'");
         }
-        Predicate condicao = builder.or(predicateSearch);
-        predicates.add(condicao);
-        return predicates.toArray(new Predicate[predicates.size()]);
     }
 
     public abstract Filter[] getSearchNames();
